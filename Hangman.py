@@ -1,7 +1,7 @@
 import random
 import os
 
-words = story = """
+words = story = """ 
 In a hidden forest, a courageous young sorceress stumbled upon a mystical amulet.
 As she wore it, whispers of ancient magic consumed her, granting incredible powers. 
 But with great power came a daunting choice: use it for good or succumb to darkness.
@@ -63,55 +63,44 @@ def display(wrong):
     return result[wrong]
 
 random_word = random.choice(words)
-print(random_word) #delete/comment this line
 
 def play():
-
     hidden_words = [char for char in random_word]
-    shown_words = list()
+    shown_words = ["_" for _ in hidden_words]  # Initialize shown_words with underscores
+    wrong_guesses = list()
     wrong = 0
 
     while True:
-        hidden_words.sort, shown_words.sort()
-        if hidden_words == shown_words:
-            print("You Won!")
+        print(f"\nAlready guessed: {wrong_guesses}{shown_words}")
+
+        if "".join(hidden_words) == "".join(shown_words):
+            print("\n\nYou Won!")
             break
-                
+
         add = input("\nEnter a guess: ")
 
-        if add in shown_words:
-            print(f"{add} already guessed!")
-            hidden_words.sort, shown_words.sort()
-            if hidden_words == shown_words:
-                print("You Won!")
+        if len(add) != 1:  # Check for single character input
+            print("\nPlease enter only one character!")
             continue
 
-        elif len(shown_words) == len(hidden_words):
-            print("You Won!")
-            break
+        if add in shown_words:
+            print(f"\n{add} already guessed!")
         else:
+            if add in hidden_words:
+                # Update the shown_words list with the guessed character in the correct positions
+                for i, char in enumerate(hidden_words):
+                    if char == add:
+                        shown_words[i] = add
+            else:
+                wrong_guesses.append(add)
+                wrong += 1
+                print(display(wrong))
+                if wrong == 7:
+                    print("\n\nGame Over")
+                    break
 
-            if len(add) == 1: #input only one character
-
-                if add in hidden_words:
-
-                    shown_words.append(add)
-
-                    for char in random_word: #print the guessed word and underscores
-
-                        if char in shown_words:
-                            print(char, end='')
-                        else:
-                            print("_", end='')
-                else: 
-                    wrong +=1
-                    print(display(wrong))
-                    if wrong == 7:
-                        print("Game Over")
-                        break
-                    continue
-
-            else: #if multiple characters
-                print("Please enter only one character!") 
+        # Display the guessed word and underscores
+        for char in shown_words:
+            print(char, end='')
 
 play()
